@@ -114,14 +114,14 @@ db<-function(){
     for (i in 1:length(string)){
       if (splitted2[[i]][2]=="firstRT"){
         splitted2[[i]][2]="fsRT"
-      }
-      else if (splitted2[[i]][2]=="finalRT"){
-        splitted2[[i]][2]="flRT"}
-      else if (splitted2[[i]][2]=="firstACC"){
+      } else if (splitted2[[i]][2]=="finalRT"){
+        splitted2[[i]][2]="flRT"
+      } else if (splitted2[[i]][2]=="firstACC"){
         splitted2[[i]][2]="Acc"
       }
       res[i]<-paste(splitted2[[i]][2],splitted2[[i]][1],sep="_")
     }
+    
     res    
   }
   
@@ -131,8 +131,7 @@ db<-function(){
   as.numeric.factor<-function(x){
     (as.numeric(levels(x))[x])
   }
-  
-  
+    
   ## Data-management----------------------------------
   
   # Read the raw csv-file
