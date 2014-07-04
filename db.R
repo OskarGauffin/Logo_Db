@@ -57,17 +57,19 @@ db<-function(){
   
   # Save starting time
   ptm<-proc.time()
-
+  
   #If required install and load packages "reshape" och "gtools" 
   if(sum(installed.packages()[,1]=="reshape")==0){
-    install.packages("reshape")}
+    install.packages("reshape")
+  }
   if(sum(installed.packages()[,1]=="gtools")==0){
-    install.packages("gtools")}
+    install.packages("gtools")      
+  }
   require(reshape)
   require(gtools)
   
   
-  # Ask for what categories to run the programme on
+  # Ask for what categories to run the programme over
   blockTypeEpok=F
   blockTypeAll=F
   blocktype=NA
@@ -78,13 +80,12 @@ db<-function(){
     if (arg=="Alla"){
       blocktype=c("HalvBlock","Block","Epok")
       blockname=c("HB","B","E")
-      blockTypeAll=T}
-    else if (arg=="Epok"){
+      blockTypeAll=T
+    } else if (arg=="Epok"){
       blocktype=c("Block", "Epok")
       blockname=c("B","E")
       blockTypeEpok=T
-    }
-    else if (arg=="Block"){
+    } else if (arg=="Block"){
       blocktype="Block"
       blockname="B"
     } else if (arg=="Halvblock"){
@@ -128,7 +129,8 @@ db<-function(){
   # Takes a factor and returns numeric. Generates warnings if
   # not supressed.
   as.numeric.factor<-function(x){
-    (as.numeric(levels(x))[x])}
+    (as.numeric(levels(x))[x])
+  }
   
   
   ## Data-management----------------------------------
@@ -160,15 +162,17 @@ db<-function(){
   
   # Code the triplets
   RepMat <- cbind(rep(1, 3), rep(2, 3), rep(3, 3), rep(4, 3))
+  
   TrilMat <- cbind(c(1, 2, 1), c(1, 3, 1), c(1, 4, 1), c(2, 1, 2), c(2, 3, 2), 
                    +c(2, 4, 2), c(3, 1, 3), c(3, 2, 3), c(3, 4, 3), c(4, 1, 4), 
                    +c(4, 2, 4), c(4, 3, 4))
+  
   HfMat <- cbind(c(1, 1, 2), c(1, 2, 2), c(1, 3, 2), c(1, 4, 2), c(2, 1, 4), 
                  +c(2, 2, 4), c(2, 3, 4), c(2, 4, 4), +c(4, 1, 3), c(4, 2, 3), c(4, 3, 3), 
                  +c(4, 4, 3), c(3, 1, 1), c(3, 2, 1), c(3, 3, 1), c(3, 4, 1))
+  
   TypeMat <- cbind(RepMat, TrilMat, HfMat)
   TypeMat <- rbind(TypeMat, 1:ncol(TypeMat))
-  
   TripType <- rep(0, nrow(data))
   
   for (i in 3:nrow(data)) {
@@ -183,8 +187,9 @@ db<-function(){
     }
     TripType[i] <- aktTripType
   }
+  
   data <- cbind(data, TripType)
-    
+  
   # Remove more practice rows, can be done now since the triplets are coded
   data <- data[("" == data$PracTrialList.Cycle), ]
   
@@ -234,7 +239,8 @@ db<-function(){
   halvBlock<-rep(1,lengthHalvBlock)
   
   for (i in 2:nHalvBlock){
-    halvBlock<-cbind((halvBlock),rep(i, lengthHalvBlock))}
+    halvBlock<-cbind((halvBlock),rep(i, lengthHalvBlock))
+  }
   HalvBlock<-rep(halvBlock,nSub)
   data<-cbind(data,HalvBlock)
   
@@ -249,7 +255,7 @@ db<-function(){
   Epok<-rep(epok,nSub)
   data<-cbind(data,Epok)
   
-
+  
   # Build the output file (resb)
   resb<-SubID
   
@@ -487,7 +493,7 @@ db<-function(){
     finalRT_Tril<-data.frame(cast(mdata,cvar, median))
     names(finalRT_Tril)<-reName(names(finalRT_Tril))
     names(finalRT_Tril)<-paste0("Trils_",names(finalRT_Tril))
-        
+    
     #firstRT Trils
     mdata<-melt(dataTTT, id.vars=c("Subject",blocktype[b]), meas="firstRT")
     firstRT_Tril<-data.frame(cast(mdata,cvar, median))
@@ -544,13 +550,13 @@ db<-function(){
       
       for (p in 1:length(SubID)){
         E_df[p,c]<-apply(blockData[p,(1+(c-1)*5):(c*5)],1, mean)
-
+        
       }
-            
       
-# #       Om vi vill beräkna epoker enbart med de block som inte är NA: Byt in denna i for-loopen ovan.
-#         E_df[p,c]<-apply(blockData[p,(1+(c-1)*5):(c*5)][,!is.na(blockData[p,(1+(c-1)*5):(c*5)])],1,mean) 
-
+      
+      # #       Om vi vill beräkna epoker enbart med de block som inte är NA: Byt in denna i for-loopen ovan.
+      #         E_df[p,c]<-apply(blockData[p,(1+(c-1)*5):(c*5)][,!is.na(blockData[p,(1+(c-1)*5):(c*5)])],1,mean) 
+      
     } 
     
     # Take names from resb
